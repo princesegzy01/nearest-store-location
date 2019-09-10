@@ -56,7 +56,7 @@ router.get("/closest", async (
 	// query mode is not specify
 	if (queryValue === "") {
 		res.status(400)
-			.json({ status: "Bad request, supply zip or address" })
+			.json({ error: "Bad request, supply zip or address" })
 			.end();
 	}
 
@@ -79,7 +79,7 @@ router.get("/closest", async (
 	// throw an error back to the user
 	if (req.query.units !== undefined && (req.query.units !== "mi" && req.query.units !== "km") ) {
 		res.status(400)
-			.json({ status: "Invalid units of measurement" })
+			.json({ error: "Invalid units of measurement" })
 			.end();
 	}
 
