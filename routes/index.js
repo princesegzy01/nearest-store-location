@@ -45,82 +45,100 @@ var source_1 = __importDefault(require("../data-source/source"));
 var geoCode = require("../utils/reverseGeoCode");
 var binarySearchClosest = require("../utils/binarySearch");
 var distanceCalculator = require("../utils/distanceCalculator");
-var csv = require('csvtojson');
-// store_location will store all 
+var csv = require("csvtojson");
+// storeLocation will store all
 // strore locations available to query
-var store_location;
+var storeLocation;
 // extract zipcodes only from all store locations
 // this will make it easier to get closest stores to a zip code
-// let zip_codes = _.map(store_location, 'zip');
-var zip_codes;
+var zipCodes;
 // Load the store location to the server memeory
 source_1.default().then(function (res) {
-    store_location = res;
+    storeLocation = res;
     // get zip code only
-    zip_codes = lodash_1.default.map(store_location, 'zip');
+    zipCodes = lodash_1.default.map(storeLocation, "zip");
 });
 /* GET home page. */
-router.get('/', function (req, res, next) {
-    // res.render('index', { title: 'Express' });
-    res.status(200).json({ status: 'done' });
+router.get("/", function (req, res, next) {
+    // res.render("index", { title: "Express" });
+    res.status(200).json({ status: "done" });
 });
 /* GET closest route. */
-router.get('/closest', function (req, res, next) {
+router.get("/closest", function (req, res, next) {
     return __awaiter(this, void 0, void 0, function () {
-        var query_value, units;
+        var queryValue, units;
         return __generator(this, function (_a) {
-            query_value = "";
+            queryValue = "";
             // get the zip query string from the user request
             if (req.query.zip) {
-                query_value = req.query.zip;
+                queryValue = req.query.zip;
             }
             //get the address string of the user request
             if (req.query.address) {
-                query_value = decodeURIComponent(req.query.address);
+                queryValue = decodeURIComponent(req.query.address);
             }
-            // return 400 error if 
+            // return 400 error if
             // query mode is not specify
-            if (query_value === "") {
-                res.status(400).json({ 'status': 'Bad request, supply zip or address' }).end();
+            if (queryValue === "") {
+                res.status(400)
+                    .json({ status: "Bad request, supply zip or address" })
+                    .end();
             }
             units = "mi";
             // if user seupply mi
             //set the unit of measurement to miles
-            if (req.query.units == "mi") {
+            if (req.query.units === "mi") {
                 units = "mi";
             }
             // if user supply km
             // set the unit of measurement to km
-            if (req.query.units == "km") {
+            if (req.query.units === "km") {
                 units = "km";
             }
             // if the user supply neither mi or km
             // throw an error back to the user
-            if (req.query.units != "mi" && req.query.units != "km") {
-                res.status(400).json({ 'status': 'Invalid units of measurement' }).end();
+            if (req.query.units !== "mi" && req.query.units !== "km") {
+                res.status(400)
+                    .json({ status: "Invalid units of measurement" })
+                    .end();
             }
             // get the geolocation of the given address or zip
-            geoCode(query_value).then(function (location) {
-                // replace - with . so that it can easily check the closest 
+            geoCode(queryValue)
+                .then(function (location) {
+                // replace - with . so that it can easily check the closest
                 // store from the array of zip avaialable from our dataset
-                var zip_query_update = location.post_code.replace('-', '.');
+                var zipQueryUpdate = location.post_code.replace("-", ".");
                 // get the closest store location to a given zip code
                 // by using binary search algorithm to get closes zip code
-                var closest_zip = binarySearchClosest(zip_codes, zip_query_update);
-                var closest_store_to_zip = store_location[closest_zip[1]];
-                var distance = distanceCalculator(location.cordinates.lat, location.cordinates.lng, closest_store_to_zip.Latitude, closest_store_to_zip.Longitude, units);
-                var closest_store = {
-                    store: closest_store_to_zip,
+                // this will return the closes zip and the its index
+                var closestZip = binarySearchClosest(zipCodes, zipQueryUpdate);
+                // get the store at the closest index of the closest zip
+                var closestStoreToZip = storeLocation[closestZip[1]];
+                // calculate the distance between the given location
+                // and the closest store in either miles or kilometers
+                var distanceValue = distanceCalculator(location.cordinates.lat, location.cordinates.lng, closestStoreToZip.Latitude, closestStoreToZip.Longitude, units);
+                // construct a closestStore object that will contains
+                // 1. closest store to zip
+                // 2. the current location of the address
+                // 3. distance betweent the store and the user address
+                var closestStore = {
+                    store: closestStoreToZip,
                     currentLocation: location,
                     distance: {
-                        distance: distance,
+                        distance: distanceValue,
                         unit: units
                     }
                 };
-                res.status(200).json({ status: closest_store }).end();
-            }).catch(function (err) {
+                // return the closestStore object
+                res.status(200)
+                    .json({ status: closestStore })
+                    .end();
+            })
+                .catch(function (err) {
                 console.log("error occoured : ", err);
-                res.status(200).json({ status: err }).end();
+                res.status(200)
+                    .json({ status: err })
+                    .end();
             });
             return [2 /*return*/];
         });
