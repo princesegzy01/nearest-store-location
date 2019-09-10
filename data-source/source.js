@@ -9,8 +9,6 @@ var lodash_1 = __importDefault(require("lodash"));
 var csv = require('csvtojson');
 var csvFilePath = './task/store-locations.csv'; //file path of csv
 function dataStore() {
-    var store_location;
-    var data;
     return csv().fromFile(csvFilePath).then(function (jsonObj) {
         var sortedLocation = lodash_1.default.orderBy(jsonObj, 'Zip Code', 'asc');
         sortedLocation.map(function (item) {

@@ -10,15 +10,12 @@ const csvFilePath='./task/store-locations.csv'; //file path of csv
 
 function dataStore(){
 
- 
-    let store_location;
-    var data: any[];
 
-    return csv().fromFile(csvFilePath).then((jsonObj: any)=>{
+    return csv().fromFile(csvFilePath).then((jsonObj: Array<Store>)=>{
         
         const sortedLocation = _.orderBy(jsonObj, 'Zip Code', 'asc'); 
     
-        sortedLocation.map(function(item){
+        sortedLocation.map(function(item: Store){
             return item.zip = item['Zip Code'].replace('-', '.');
         });
 

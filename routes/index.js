@@ -48,7 +48,7 @@ var distanceCalculator = require("../utils/distanceCalculator");
 var csv = require('csvtojson');
 // store_location will store all 
 // strore locations available to query
-var store_location = [];
+var store_location;
 // extract zipcodes only from all store locations
 // this will make it easier to get closest stores to a zip code
 // let zip_codes = _.map(store_location, 'zip');
@@ -81,29 +81,34 @@ router.get('/closest', function (req, res, next) {
             // return 400 error if 
             // query mode is not specify
             if (query_value === "") {
-                res.status(400).json({ 'status': 'Bad request' }).end();
+                res.status(400).json({ 'status': 'Bad request, supply zip or address' }).end();
             }
             units = "mi";
+            // if user seupply mi
+            //set the unit of measurement to miles
             if (req.query.units == "mi") {
                 units = "mi";
             }
+            // if user supply km
+            // set the unit of measurement to km
             if (req.query.units == "km") {
                 units = "km";
             }
-            if (req.query.units == "mi" || req.query.units == "km") {
+            // if the user supply neither mi or km
+            // throw an error back to the user
+            if (req.query.units != "mi" && req.query.units != "km") {
                 res.status(400).json({ 'status': 'Invalid units of measurement' }).end();
             }
+            // get the geolocation of the given address or zip
             geoCode(query_value).then(function (location) {
-                console.log(" loc ", location);
-                // replace - with . so that it can easily be query
+                // replace - with . so that it can easily check the closest 
+                // store from the array of zip avaialable from our dataset
                 var zip_query_update = location.post_code.replace('-', '.');
                 // get the closest store location to a given zip code
                 // by using binary search algorithm to get closes zip code
                 var closest_zip = binarySearchClosest(zip_codes, zip_query_update);
                 var closest_store_to_zip = store_location[closest_zip[1]];
-                console.log(" <<<< ", closest_zip);
                 var distance = distanceCalculator(location.cordinates.lat, location.cordinates.lng, closest_store_to_zip.Latitude, closest_store_to_zip.Longitude, units);
-                console.log(" <<< ", distance);
                 var closest_store = {
                     store: closest_store_to_zip,
                     currentLocation: location,

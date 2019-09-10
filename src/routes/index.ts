@@ -13,17 +13,17 @@ const csv = require('csvtojson')
 
 // store_location will store all 
 // strore locations available to query
-let store_location = [];
+let store_location: Array<Store>;
 
 
 
 // extract zipcodes only from all store locations
 // this will make it easier to get closest stores to a zip code
 // let zip_codes = _.map(store_location, 'zip');
-let zip_codes;
+let zip_codes: Array<number>;
 
 // Load the store location to the server memeory
-dataStore().then((res) => {
+dataStore().then((res: Array<Store>) => {
   store_location = res;
 
   // get zip code only
@@ -40,9 +40,8 @@ router.get('/', function(req: express.Request, res: express.Response, next: expr
 
 /* GET closest route. */
 router.get('/closest', async function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  // res.render('index', { title: 'Express' });
 
-
+  // create a variable for search value
   let query_value = ""
 
   // get the zip query string from the user request
@@ -58,31 +57,35 @@ router.get('/closest', async function(req: express.Request, res: express.Respons
   // return 400 error if 
   // query mode is not specify
   if(query_value === ""){
-    res.status(400).json({ 'status' : 'Bad request'}).end();
+    res.status(400).json({ 'status' : 'Bad request, supply zip or address'}).end();
   }
 
-  // gets unit of measurement
+  // create unit of measurement variable
   let units = "mi";
 
+  // if user seupply mi
+  //set the unit of measurement to miles
   if(req.query.units == "mi"){
     units = "mi";
   }
   
+  // if user supply km
+  // set the unit of measurement to km
   if(req.query.units == "km"){
     units = "km";
   }
 
-
-  if(req.query.units == "mi"  ||  req.query.units == "km"){
+  // if the user supply neither mi or km
+  // throw an error back to the user
+  if(req.query.units != "mi"  &&  req.query.units != "km"){
     res.status(400).json({ 'status' : 'Invalid units of measurement'}).end();
   }
   
-
-  geoCode(query_value).then(location => {
-    console.log(" loc ", location);
-
+  // get the geolocation of the given address or zip
+  geoCode(query_value).then((location: Location) => {
   
-  // replace - with . so that it can easily be query
+  // replace - with . so that it can easily check the closest 
+  // store from the array of zip avaialable from our dataset
   const zip_query_update = location.post_code.replace('-', '.')
 
   // get the closest store location to a given zip code
@@ -91,11 +94,8 @@ router.get('/closest', async function(req: express.Request, res: express.Respons
 
   const closest_store_to_zip = store_location[closest_zip[1]];
 
-  console.log(" <<<< ", closest_zip)
-
   let distance = distanceCalculator(location.cordinates.lat,location.cordinates.lng, closest_store_to_zip.Latitude, closest_store_to_zip.Longitude, units)
 
-  console.log(" <<< ", distance)
     const closest_store = {
       store : closest_store_to_zip,
       currentLocation: location,
@@ -105,7 +105,7 @@ router.get('/closest', async function(req: express.Request, res: express.Respons
       }
     }
     res.status(200).json({ status: closest_store }).end()
-  }).catch(err => {
+  }).catch((err: Error) => {
     console.log("error occoured : ", err)
     res.status(200).json({status  : err}).end()
   });

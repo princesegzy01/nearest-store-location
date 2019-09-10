@@ -63,7 +63,6 @@ var getClosestZip = function(zip_array: Array<number>, target: number) {
     let low_diff = Math.abs(zip_array[low] - target)
     let high_diff = Math.abs(zip_array[high] - target)
 
-    // console.log(low_diff, " -- ", high_diff)
 
     // if the value of low difference is lesser than high difference
     // return the value and the index location if the low difference
