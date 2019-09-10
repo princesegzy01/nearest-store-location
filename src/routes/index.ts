@@ -1,14 +1,11 @@
 import express from "express";
-const router = express.Router();
 import _ from "lodash";
 import dataStore from "../data-source/source";
+import binarySearchClosest from "../utils/binarySearch";
+import distanceCalculator from "../utils/distanceCalculator";
+import geoCode from "../utils/reverseGeoCode";
 
-const geoCode = require("../utils/reverseGeoCode");
-const binarySearchClosest = require("../utils/binarySearch");
-
-const distanceCalculator = require("../utils/distanceCalculator");
-
-const csv = require("csvtojson");
+const router = express.Router();
 
 // storeLocation will store all
 // strore locations available to query
@@ -16,10 +13,10 @@ let storeLocation: Store[];
 
 // extract zipcodes only from all store locations
 // this will make it easier to get closest stores to a zip code
-let zipCodes: Array<number>;
+let zipCodes: number[];
 
 // Load the store location to the server memeory
-dataStore().then((res: Array<Store>) => {
+dataStore().then((res: Store[]) => {
 	storeLocation = res;
 
 	// get zip code only
@@ -27,21 +24,21 @@ dataStore().then((res: Array<Store>) => {
 });
 
 /* GET home page. */
-router.get("/", function(
+router.get("/", (
 	req: express.Request,
 	res: express.Response,
-	next: express.NextFunction
-) {
+	next: express.NextFunction,
+) => {
 	// res.render("index", { title: "Express" });
 	res.status(200).json({ status: "done" });
 });
 
 /* GET closest route. */
-router.get("/closest", async function(
+router.get("/closest", async (
 	req: express.Request,
 	res: express.Response,
-	next: express.NextFunction
-) {
+	next: express.NextFunction,
+) => {
 	// create a variable for search value
 	let queryValue = "";
 
@@ -50,7 +47,7 @@ router.get("/closest", async function(
 		queryValue = req.query.zip;
 	}
 
-	//get the address string of the user request
+	// get the address string of the user request
 	if (req.query.address) {
 		queryValue = decodeURIComponent(req.query.address);
 	}
@@ -67,7 +64,7 @@ router.get("/closest", async function(
 	let units = "mi";
 
 	// if user seupply mi
-	//set the unit of measurement to miles
+	// set the unit of measurement to miles
 	if (req.query.units === "mi") {
 		units = "mi";
 	}
@@ -120,8 +117,8 @@ router.get("/closest", async function(
 				currentLocation: location,
 				distance: {
 					distance: distanceValue,
-					unit: units
-				}
+					unit: units,
+				},
 			};
 
 			// return the closestStore object

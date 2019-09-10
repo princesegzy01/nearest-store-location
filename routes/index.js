@@ -37,15 +37,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var router = express_1.default.Router();
 var lodash_1 = __importDefault(require("lodash"));
 var source_1 = __importDefault(require("../data-source/source"));
-var geoCode = require("../utils/reverseGeoCode");
-var binarySearchClosest = require("../utils/binarySearch");
-var distanceCalculator = require("../utils/distanceCalculator");
-var csv = require("csvtojson");
+var binarySearch_1 = __importDefault(require("../utils/binarySearch"));
+var distanceCalculator_1 = __importDefault(require("../utils/distanceCalculator"));
+var reverseGeoCode_1 = __importDefault(require("../utils/reverseGeoCode"));
+var router = express_1.default.Router();
 // storeLocation will store all
 // strore locations available to query
 var storeLocation;
@@ -64,84 +64,82 @@ router.get("/", function (req, res, next) {
     res.status(200).json({ status: "done" });
 });
 /* GET closest route. */
-router.get("/closest", function (req, res, next) {
-    return __awaiter(this, void 0, void 0, function () {
-        var queryValue, units;
-        return __generator(this, function (_a) {
-            queryValue = "";
-            // get the zip query string from the user request
-            if (req.query.zip) {
-                queryValue = req.query.zip;
-            }
-            //get the address string of the user request
-            if (req.query.address) {
-                queryValue = decodeURIComponent(req.query.address);
-            }
-            // return 400 error if
-            // query mode is not specify
-            if (queryValue === "") {
-                res.status(400)
-                    .json({ status: "Bad request, supply zip or address" })
-                    .end();
-            }
+router.get("/closest", function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var queryValue, units;
+    return __generator(this, function (_a) {
+        queryValue = "";
+        // get the zip query string from the user request
+        if (req.query.zip) {
+            queryValue = req.query.zip;
+        }
+        // get the address string of the user request
+        if (req.query.address) {
+            queryValue = decodeURIComponent(req.query.address);
+        }
+        // return 400 error if
+        // query mode is not specify
+        if (queryValue === "") {
+            res.status(400)
+                .json({ status: "Bad request, supply zip or address" })
+                .end();
+        }
+        units = "mi";
+        // if user seupply mi
+        // set the unit of measurement to miles
+        if (req.query.units === "mi") {
             units = "mi";
-            // if user seupply mi
-            //set the unit of measurement to miles
-            if (req.query.units === "mi") {
-                units = "mi";
-            }
-            // if user supply km
-            // set the unit of measurement to km
-            if (req.query.units === "km") {
-                units = "km";
-            }
-            // if the user supply neither mi or km
-            // throw an error back to the user
-            if (req.query.units !== "mi" && req.query.units !== "km") {
-                res.status(400)
-                    .json({ status: "Invalid units of measurement" })
-                    .end();
-            }
-            // get the geolocation of the given address or zip
-            geoCode(queryValue)
-                .then(function (location) {
-                // replace - with . so that it can easily check the closest
-                // store from the array of zip avaialable from our dataset
-                var zipQueryUpdate = location.post_code.replace("-", ".");
-                // get the closest store location to a given zip code
-                // by using binary search algorithm to get closes zip code
-                // this will return the closes zip and the its index
-                var closestZip = binarySearchClosest(zipCodes, zipQueryUpdate);
-                // get the store at the closest index of the closest zip
-                var closestStoreToZip = storeLocation[closestZip[1]];
-                // calculate the distance between the given location
-                // and the closest store in either miles or kilometers
-                var distanceValue = distanceCalculator(location.cordinates.lat, location.cordinates.lng, closestStoreToZip.Latitude, closestStoreToZip.Longitude, units);
-                // construct a closestStore object that will contains
-                // 1. closest store to zip
-                // 2. the current location of the address
-                // 3. distance betweent the store and the user address
-                var closestStore = {
-                    store: closestStoreToZip,
-                    currentLocation: location,
-                    distance: {
-                        distance: distanceValue,
-                        unit: units
-                    }
-                };
-                // return the closestStore object
-                res.status(200)
-                    .json({ status: closestStore })
-                    .end();
-            })
-                .catch(function (err) {
-                console.log("error occoured : ", err);
-                res.status(200)
-                    .json({ status: err })
-                    .end();
-            });
-            return [2 /*return*/];
+        }
+        // if user supply km
+        // set the unit of measurement to km
+        if (req.query.units === "km") {
+            units = "km";
+        }
+        // if the user supply neither mi or km
+        // throw an error back to the user
+        if (req.query.units !== "mi" && req.query.units !== "km") {
+            res.status(400)
+                .json({ status: "Invalid units of measurement" })
+                .end();
+        }
+        // get the geolocation of the given address or zip
+        reverseGeoCode_1.default(queryValue)
+            .then(function (location) {
+            // replace - with . so that it can easily check the closest
+            // store from the array of zip avaialable from our dataset
+            var zipQueryUpdate = location.post_code.replace("-", ".");
+            // get the closest store location to a given zip code
+            // by using binary search algorithm to get closes zip code
+            // this will return the closes zip and the its index
+            var closestZip = binarySearch_1.default(zipCodes, zipQueryUpdate);
+            // get the store at the closest index of the closest zip
+            var closestStoreToZip = storeLocation[closestZip[1]];
+            // calculate the distance between the given location
+            // and the closest store in either miles or kilometers
+            var distanceValue = distanceCalculator_1.default(location.cordinates.lat, location.cordinates.lng, closestStoreToZip.Latitude, closestStoreToZip.Longitude, units);
+            // construct a closestStore object that will contains
+            // 1. closest store to zip
+            // 2. the current location of the address
+            // 3. distance betweent the store and the user address
+            var closestStore = {
+                store: closestStoreToZip,
+                currentLocation: location,
+                distance: {
+                    distance: distanceValue,
+                    unit: units,
+                },
+            };
+            // return the closestStore object
+            res.status(200)
+                .json({ status: closestStore })
+                .end();
+        })
+            .catch(function (err) {
+            console.log("error occoured : ", err);
+            res.status(200)
+                .json({ status: err })
+                .end();
         });
+        return [2 /*return*/];
     });
-});
+}); });
 module.exports = router;
