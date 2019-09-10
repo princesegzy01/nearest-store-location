@@ -77,7 +77,7 @@ router.get("/closest", async (
 
 	// if the user supply neither mi or km
 	// throw an error back to the user
-	if (req.query.units !== "mi" && req.query.units !== "km") {
+	if (req.query.units !== undefined && (req.query.units !== "mi" && req.query.units !== "km") ) {
 		res.status(400)
 			.json({ status: "Invalid units of measurement" })
 			.end();
@@ -89,11 +89,12 @@ router.get("/closest", async (
 			// replace - with . so that it can easily check the closest
 			// store from the array of zip avaialable from our dataset
 			const zipQueryUpdate = location.post_code.replace("-", ".");
+			const zipQuerNumber = Number(zipQueryUpdate);
 
 			// get the closest store location to a given zip code
 			// by using binary search algorithm to get closes zip code
 			// this will return the closes zip and the its index
-			const closestZip = binarySearchClosest(zipCodes, zipQueryUpdate);
+			const closestZip = binarySearchClosest(zipCodes, zipQuerNumber);
 
 			// get the store at the closest index of the closest zip
 			const closestStoreToZip = storeLocation[closestZip[1]];

@@ -1,9 +1,14 @@
 import { createClient } from "@google/maps";
 import _ from "lodash";
 
+
+	
+// get the key from enviroment variable
+const authKey: string = process.env.KEY || "";
+
 // create a googleMap client object
 const googleMapsClient = createClient({
-	key: "AIzaSyBI7Rad8slJbP0_wbjmbClKOMFMSdlbj0I",
+	key: authKey,
 });
 
 // getlocation function takes in an address or a zip as inpuy
