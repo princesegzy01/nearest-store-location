@@ -114,9 +114,20 @@ router.get("/closest", function (req, res, next) { return __awaiter(_this, void 
             var closestZip = binarySearch_1.default(zipCodes, zipQuerNumber);
             // get the store at the closest index of the closest zip
             var closestStoreToZip = storeLocation[closestZip[1]];
-            // calculate the distance between the given location
-            // and the closest store in either miles or kilometers
-            var distanceValue = distanceCalculator_1.default(location.cordinates.lat, location.cordinates.lng, closestStoreToZip.Latitude, closestStoreToZip.Longitude, units);
+            var distanceValue;
+            // run distance calculation in a try/catch
+            try {
+                // calculate the distance between the given location
+                // and the closest store in either miles or kilometers
+                distanceValue = distanceCalculator_1.default(location.cordinates.lat, location.cordinates.lng, closestStoreToZip.Latitude, closestStoreToZip.Longitude, units);
+            }
+            catch (err) {
+                // send 500 Internal server error
+                // if there is a problem with distance calculation
+                res.status(500)
+                    .json({ error: err.message })
+                    .end();
+            }
             // construct a closestStore object that will contains
             // 1. closest store to zip
             // 2. the current location of the address

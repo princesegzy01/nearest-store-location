@@ -99,15 +99,29 @@ router.get("/closest", async (
 			// get the store at the closest index of the closest zip
 			const closestStoreToZip = storeLocation[closestZip[1]];
 
-			// calculate the distance between the given location
-			// and the closest store in either miles or kilometers
-			const distanceValue = distanceCalculator(
-				location.cordinates.lat,
-				location.cordinates.lng,
-				closestStoreToZip.Latitude,
-				closestStoreToZip.Longitude,
-				units,
-			);
+			let distanceValue;
+
+			// run distance calculation in a try/catch
+			try {
+
+				// calculate the distance between the given location
+				// and the closest store in either miles or kilometers
+				distanceValue = distanceCalculator(
+					location.cordinates.lat,
+					location.cordinates.lng,
+					closestStoreToZip.Latitude,
+					closestStoreToZip.Longitude,
+					units,
+				);
+			
+			} catch (err) {
+
+				// send 500 Internal server error
+				// if there is a problem with distance calculation
+				res.status(500)
+				.json({ error: err.message })
+				.end();
+			}
 			
 			// construct a closestStore object that will contains
 			// 1. closest store to zip
