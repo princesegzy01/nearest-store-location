@@ -1,6 +1,6 @@
 # Nearest Store Location
 
-A simple NodeJs application that accepts a zipcode or address as query string then return a store from a given dataset closesr to it.
+A simple NodeJs application that accepts a zipcode or address as query string then return a store from a given dataset closer to it.
 
 check the `/task/README.md` to view the original task.
 
@@ -42,26 +42,25 @@ I solve this by sorting the converted dataset zipcodes, then perfom a binary sea
         style="float: left; margin-right: 10px;" />
 
 
-## .
 ## Parameters to supply
 GET `/closest` is the route called to retrieve the closest store. However there are some compulsory querystring parameters that is needed to be pass along with the query.
 
-- `zip`: (String) The caller of this endpoint needs to supply a valid zip code e.g 01035 to sucessfully query this endpoint.
+- `zip`: (String) The caller of this endpoint needs to supply a valid zip code e.g *01035* to sucessfully query this endpoint.
 
     OR
 
-- `address` (String): This is a  human readable address that e.g 1600 Amphitheatre Parkway in Mountain View, California, United States that can be passed along with the request as against zip codes
+- `address` (String): This is a  human readable address that e.g *1600 Amphitheatre Parkway in Mountain View, California, United States* that can be passed along with the request as against zip codes
 
 
 
-- `units` (String) : This is the unit of measurement you want to see get the distance. parameter must be either `mi` (default) or `km`.
+- `units` (String) : This is the unit of measurement you want to get the distance in. parameter must be either `mi` (default) or `km`.
 
 ## Result
 
 Below is a sample result of a successful query and the json output contains 3 nodes:
-1. **store** : This is the closest store retrieved from the dataset base on the algorithm.
+1. **store** : This is the closest store retrieved from the dataset.
 2. **currentLocation** : This is the cordinates of the given zip code or address.
-3. **distance**: This nodes return the calculated distance between the store and the current loacation node.
+3. **distance**: This return the calculated distance between the store and the current loacation node.
 
         {
             "status": {
