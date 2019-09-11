@@ -19,6 +19,7 @@
     "@types/googlemaps": "^3.37.6",
     "@types/mocha": "^5.2.7",
     "@types/sinon": "^7.0.13",
+    "@types/supertest": "^2.0.8",
     "cookie-parser": "~1.4.4",
     "csvtojson": "^2.0.10",
     "debug": "~2.6.9",

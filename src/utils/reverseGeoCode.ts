@@ -1,8 +1,6 @@
 import { createClient } from "@google/maps";
 import _ from "lodash";
 
-
-	
 // get the key from enviroment variable
 const authKey: string = process.env.KEY || "";
 
@@ -13,7 +11,7 @@ const googleMapsClient = createClient({
 
 // getlocation function takes in an address or a zip as inpuy
 // then return a cordianates with a postcode as output
-const getLocation = (addr: string) => {
+const getLocation = (addr: string): any => {
 	return new Promise((resolve, reject) => {
 
 		// use the geocode methode to get cordinates
