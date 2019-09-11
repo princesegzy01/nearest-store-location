@@ -42,6 +42,13 @@ I solve this by sorting the converted dataset zipcodes, then perfom a binary sea
         alt="Markdown Monster icon"
         style="float: left; margin-right: 10px;" />
 
+## Usage
+  {server}/closest?zip=<zip>
+
+  {server}/closest?address=<address>
+  
+  {server}/closest?zip=<zip>&units=<(mi|km)>
+
 
 ## Parameters to supply
 GET `/closest` is the route called to retrieve the closest store. However there are some compulsory querystring parameters that is needed to be pass along with the query.
@@ -99,6 +106,10 @@ To run the test, open your Terminal, cd into the project root and run  `npm test
 
 
 ## Reference
-1. (Distance Calculation)  https://www.geodatasource.com/developers/javascript
+1. (NodeJS Express framework) https://expressjs.com/
+2. (Distance Calculation)  https://www.geodatasource.com/developers/javascript
+3. (Csv to Json ) https://www.npmjs.com/package/csvtojson
+4. (Google Map Service) https://www.npmjs.com/package/@google/maps
+
 
 Feel free to reach out to me if you have any questions at princesegzy01@gmail.com
