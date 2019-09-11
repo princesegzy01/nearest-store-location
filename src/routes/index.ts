@@ -1,7 +1,6 @@
 import express from "express";
 import _ from "lodash";
 import dataStore from "../data-source/source";
-import binarySearchClosest from "../utils/binarySearch";
 import distanceCalculator from "../utils/distanceCalculator";
 import geoCode from "../utils/reverseGeoCode";
 
