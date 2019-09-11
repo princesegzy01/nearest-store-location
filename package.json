@@ -30,6 +30,7 @@
     "lodash": "^4.17.15",
     "morgan": "~1.9.1",
     "nodemon": "^1.19.1",
+    "superagent": "^3.7.0",
     "typescript": "^3.6.2"
   },
   "devDependencies": {
