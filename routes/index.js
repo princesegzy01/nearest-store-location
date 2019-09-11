@@ -80,7 +80,7 @@ router.get("/closest", function (req, res, next) { return __awaiter(_this, void 
         // query mode is not specify
         if (queryValue === "") {
             res.status(400)
-                .json({ status: "Bad request, supply zip or address" })
+                .json({ error: "Bad request, supply zip or address" })
                 .end();
         }
         units = "mi";
@@ -96,9 +96,9 @@ router.get("/closest", function (req, res, next) { return __awaiter(_this, void 
         }
         // if the user supply neither mi or km
         // throw an error back to the user
-        if (req.query.units !== "mi" && req.query.units !== "km") {
+        if (req.query.units !== undefined && (req.query.units !== "mi" && req.query.units !== "km")) {
             res.status(400)
-                .json({ status: "Invalid units of measurement" })
+                .json({ error: "Invalid units of measurement" })
                 .end();
         }
         // get the geolocation of the given address or zip
@@ -107,10 +107,11 @@ router.get("/closest", function (req, res, next) { return __awaiter(_this, void 
             // replace - with . so that it can easily check the closest
             // store from the array of zip avaialable from our dataset
             var zipQueryUpdate = location.post_code.replace("-", ".");
+            var zipQuerNumber = Number(zipQueryUpdate);
             // get the closest store location to a given zip code
             // by using binary search algorithm to get closes zip code
             // this will return the closes zip and the its index
-            var closestZip = binarySearch_1.default(zipCodes, zipQueryUpdate);
+            var closestZip = binarySearch_1.default(zipCodes, zipQuerNumber);
             // get the store at the closest index of the closest zip
             var closestStoreToZip = storeLocation[closestZip[1]];
             // calculate the distance between the given location

@@ -17,8 +17,8 @@ interface Store {
     City:	string,
     State:	string,
     'Zip Code':	string,
-    Latitude	: string,
-    Longitude	: string,
+    Latitude	: number,
+    Longitude	: number,
     County: string,
     zip	: string,
 }

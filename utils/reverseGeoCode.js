@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var maps_1 = require("@google/maps");
+// get the key from enviroment variable
+var authKey = process.env.KEY || "";
 // create a googleMap client object
 var googleMapsClient = maps_1.createClient({
-    key: "AIzaSyBI7Rad8slJbP0_wbjmbClKOMFMSdlbj0I",
+    key: authKey,
 });
 // getlocation function takes in an address or a zip as inpuy
 // then return a cordianates with a postcode as output
