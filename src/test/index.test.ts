@@ -1,4 +1,3 @@
-import express from "express";
 import sinon from "sinon";
 import request from "supertest";
 const app = require("../app");

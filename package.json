@@ -9,7 +9,7 @@
     "linter": "tslint src/**/*.ts && echo 'Linter successful'",
     "ts-watch": "tsc -w",
     "test-2": "mocha --timeout 15000 test/*.test.js",
-    "test": "KEY=AIzaSyBI7Rad8slJbP0_wbjmbClKOMFMSdlbj0I mocha --exit",
+    "test": "KEY=AIzaSyBI7Rad8slJbP0_wbjmbClKOMFMSdlbj0I mocha --recursive --exit",
     "test-coverage": "KEY=AIzaSyBI7Rad8slJbP0_wbjmbClKOMFMSdlbj0I  nyc mocha"
   },
   "dependencies": {
