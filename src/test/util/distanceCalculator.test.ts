@@ -5,30 +5,26 @@ describe("Unit testing distance calculator Module", () => {
 
 	it("Should return Latitude 1 error",  () => {
         // @ts-ignore
-		const response: any = distanceCalculator("0.3466",0.25748,-0.567643,0.25455, "mi");
-        expect(response).to.be.an("error");
-        expect(response.message).to.equal("Latitude 1 must be a number");
-    });
+		const response: any = distanceCalculator("dhshjd",0.25748,-0.567643,0.25455, "mi");
+        expect(response).to.be.NaN;
+   });
     
     it("Should return Longitude 1 error",  () => {
         // @ts-ignore
-		const response: any = distanceCalculator(0.25748,"0.3466",-0.567643,0.25455, "mi");
-        expect(response).to.be.an("error");
-        expect(response.message).to.equal("Longitude 1 must be a number");
+		const response: any = distanceCalculator(0.25748,"dnkdsn",-0.567643,0.25455, "mi");
+        expect(response).to.be.NaN;
     });
 
     it("Should return Latitude 2 error",  () => {
         // @ts-ignore
-		const response: any = distanceCalculator(0.25748,-0.567643,"0.3466",0.25455, "mi");
-        expect(response).to.be.an("error");
-        expect(response.message).to.equal("Latitude 2 must be a number");
+		const response: any = distanceCalculator(0.25748,-0.567643,"djsjkndf",0.25455, "mi");
+        expect(response).to.be.NaN;
     });
     
     it("Should return Longitude 2 error",  () => {
         // @ts-ignore
-		const response: any = distanceCalculator(0.25748,-0.567643,0.25455,"0.3466", "mi");
-        expect(response).to.be.an("error");
-        expect(response.message).to.equal("Longitude 2 must be a number");
+		const response: any = distanceCalculator(0.25748,-0.567643,0.25455,"sjhjdn", "mi");
+        expect(response).to.be.NaN;
     });
 
     it("Should return unit type error",  () => {
