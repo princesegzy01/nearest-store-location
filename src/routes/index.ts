@@ -86,29 +86,32 @@ router.get("/closest", async (
 	// get the geolocation of the given address or zip
 	geoCode(queryValue)
 		.then((location: Location) => {
-			// replace - with . so that it can easily check the closest
-			// store from the array of zip avaialable from our dataset
-			const zipQueryUpdate = location.post_code.replace("-", ".");
-			const zipQuerNumber = Number(zipQueryUpdate);
+			
+			// set an infinity number to hold closest zip
+			let distanceMeasure = Number.POSITIVE_INFINITY;
+			let closestStoreToZip;
 
-			// get the closest store location to a given zip code
-			// by using binary search algorithm to get closes zip code
-			// this will return the closes zip and the its index
-			const closestZip = binarySearchClosest(zipCodes, zipQuerNumber);
 
-			// get the store at the closest index of the closest zip
-			const closestStoreToZip = storeLocation[closestZip[1]];
-		
-			// calculate the distance between the given location
-			// and the closest store in either miles or kilometers
-			const distanceValue = distanceCalculator(
-				location.cordinates.lat,
-				location.cordinates.lng,
-				closestStoreToZip.Latitude,
-				closestStoreToZip.Longitude,
-				units,
-			);
-	
+			// loop through each store and calculate the distance
+			// between the store and the given zip/address cordinates
+			storeLocation.forEach((store, index, arr) => {
+				let distance = distanceCalculator(
+					location.cordinates.lat,
+					location.cordinates.lng,
+					store.Latitude,
+					store.Longitude,
+					units,
+				);
+				distance = Number(distance)
+
+				// get the lowest distance 
+				// and return it as the closest store
+				if(distance < distanceMeasure) {
+					distanceMeasure = distance;
+					closestStoreToZip = store
+				}
+			});
+			
 			// construct a closestStore object that will contains
 			// 1. closest store to zip
 			// 2. the current location of the address
@@ -117,7 +120,7 @@ router.get("/closest", async (
 				store: closestStoreToZip,
 				currentLocation: location,
 				distance: {
-					distance: distanceValue,
+					distance: distanceMeasure,
 					unit: units,
 				},
 			};
