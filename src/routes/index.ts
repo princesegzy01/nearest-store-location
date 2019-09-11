@@ -10,16 +10,9 @@ const router = express.Router();
 // strore locations available to query
 let storeLocation: Store[];
 
-// extract zipcodes only from all store locations
-// this will make it easier to get closest stores to a zip code
-let zipCodes: number[];
-
 // Load the store location to the server memeory
 dataStore().then((res: Store[]) => {
 	storeLocation = res;
-
-	// get zip code only
-	zipCodes = _.map(storeLocation, "zip");
 });
 
 /* GET home page. */

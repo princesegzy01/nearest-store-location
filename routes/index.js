@@ -40,7 +40,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
-var lodash_1 = __importDefault(require("lodash"));
 var source_1 = __importDefault(require("../data-source/source"));
 var distanceCalculator_1 = __importDefault(require("../utils/distanceCalculator"));
 var reverseGeoCode_1 = __importDefault(require("../utils/reverseGeoCode"));
@@ -48,14 +47,9 @@ var router = express_1.default.Router();
 // storeLocation will store all
 // strore locations available to query
 var storeLocation;
-// extract zipcodes only from all store locations
-// this will make it easier to get closest stores to a zip code
-var zipCodes;
 // Load the store location to the server memeory
 source_1.default().then(function (res) {
     storeLocation = res;
-    // get zip code only
-    zipCodes = lodash_1.default.map(storeLocation, "zip");
 });
 /* GET home page. */
 router.get("/", function (req, res, next) {
