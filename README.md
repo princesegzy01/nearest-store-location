@@ -43,11 +43,11 @@ I solve this by sorting the converted dataset zipcodes, then perfom a binary sea
         style="float: left; margin-right: 10px;" />
 
 ## Usage
-  {server}/closest?zip=<zip>
+  {server}/closest?zip=<*zip*>
 
-  {server}/closest?address=<address>
-  
-  {server}/closest?zip=<zip>&units=<(mi|km)>
+  {server}/closest?address=<*address*>
+
+  {server}/closest?zip=<*zip*>&units=<*(mi|km)*>
 
 
 ## Parameters to supply
