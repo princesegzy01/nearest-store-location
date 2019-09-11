@@ -29,6 +29,15 @@ I solve this by sorting the converted dataset zipcodes, then perfom a binary sea
 - change directory to the app you cloned buy running `cd nearest-store-location`
 - Install dependencies by running `npm install` on your terminal.
 
+## Project Structure
+	    1. /bin          - This directory contains the entry point to the nodejs application.
+	    2. /data-source  - /data-source folder contains the Nodejs module the loads the store-location.csv dataset and expose it for use.
+	    3. /routes       - The /route directory contains the module that respond to http request to the `/closest` endpoint.  
+	    4. /src          - This folder contains all the source scripts written in typescripts to be traspiled to a specific version of javascripts. 
+	    5. /task 	     - This contains the original Readme.md task and the store-location.csv file. 
+	    6. /test 	     - This directory contains the test module used in this project.
+	    7. /utils        - The /utils folder contains utilities modules used in the project.
+
 ## Start Server
 - From your terminal, run  `npm run ts-watch` to watch changes to typescripts file and automatically transpile it to javascripts.
 
