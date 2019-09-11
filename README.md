@@ -11,14 +11,15 @@ check the `/task/README.md` to view the original task.
 4. TsLint
 5. Google GeoLocation
 
-## Algorithm
+## Algorithm/Data Structure
 After getting a postal code from a given zip/address via google geolocation API, we need to get the closest zip number from our dataset.
 
-Firstly all compound zip code such as 64503-9458 inside our dataset are converted into 64503.3458 so that we can perfom mathematical operation on it.
+Firstly, all compound zip code such as *64503-9458* inside our dataset are converted into *64503.9458* so that it can easitly be sort and we can perfom comparison and logical operation on it.
 
+### Problem
+Searching for a closest store to a give zip leads me to linear search of the whole dataset array which is `O(n)`. This is a big problem and it is not going to scale as the list of store in the datasets keeps increasing.
 
-Searching for a closest store to a give zip leads me to linear search of the whole dataset array which is `O(n)`.
-
+### Solution
 I solve this by sorting the converted dataset zipcodes, then perfom a binary search `O( log N)` which is faster compare to `O (n)`.
 
 
