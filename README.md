@@ -11,7 +11,12 @@ check the `/task/README.md` to view the original task.
 4. TsLint
 5. Google GeoLocation
 
-## Algorithm/Data Structure
+## Algorithm
+1. Retrieve Zip code or address as a query string from the request
+2. Query google maps API to retrieve the zip/address cordinates.
+3. Perform a loop to continously calculate the distace between google cordinates and the cordinates from the datasets.
+4. Store the value lowest value found while calculating the distance.
+5. Get the index of the store with the lowest value and return it.
 
 ##  Setup & Installation
 - Clone the repository into a directory of your choice
