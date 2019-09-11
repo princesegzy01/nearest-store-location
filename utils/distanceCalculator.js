@@ -28,6 +28,24 @@
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 Object.defineProperty(exports, "__esModule", { value: true });
 var distance = function (lat1, lon1, lat2, lon2, unit) {
+    if (!lat1 || typeof lat1 !== "number") {
+        return new Error("Latitude 1 must be a number");
+    }
+    if (!lon1 || typeof lon1 !== "number") {
+        return new Error("Longitude 1 must be a number");
+    }
+    if (!lat2 || typeof lat2 !== "number") {
+        return new Error("Latitude 2 must be a number");
+    }
+    if (!lon2 || typeof lon2 !== "number") {
+        return new Error("Longitude 2 must be a number");
+    }
+    if (!unit || typeof unit !== "string") {
+        return new Error("Unit must be of a type string");
+    }
+    if (unit !== "mi" && unit !== "km") {
+        return new Error("Unit must be either mi or km");
+    }
     if (lat1 === lat2 && lon1 === lon2) {
         return 0;
     }
