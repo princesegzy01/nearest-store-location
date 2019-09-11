@@ -8,19 +8,8 @@ const dataStore = () => {
 	return csv()
 		.fromFile(csvFilePath)
 		.then((jsonObj: Store[]) => {
-
-			// order the dataset by zip code
-			// so that we can use binary search on it
-			const sortedLocation = _.orderBy(jsonObj, "Zip Code", "asc");
-
-			// convert complex zipcode containing - to .
-			// so that we can perform arithmetic calculation on it
-			sortedLocation.map((item: Store) => {
-				return (item.zip = item["Zip Code"].replace("-", "."));
-			});
-
 			// return the processed dataset
-			return sortedLocation;
+			return jsonObj;
 		});
 };
 
